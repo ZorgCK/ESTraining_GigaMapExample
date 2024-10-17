@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>one.microstream</groupId>
+	<artifactId>ESTraining_GigamapExample</artifactId>
+	<version>0.1</version>
+	<packaging>${packaging}</packaging>
+
+	<parent>
+		<groupId>io.micronaut.platform</groupId>
+		<artifactId>micronaut-parent</artifactId>
+		<version>4.6.3</version>
+	</parent>
+	<properties>
+		<packaging>jar</packaging>
+		<jdk.version>17</jdk.version>
+		<release.version>17</release.version>
+		<micronaut.version>4.6.3</micronaut.version>
+		<micronaut.runtime>netty</micronaut.runtime>
+		<micronaut.aot.enabled>false</micronaut.aot.enabled>
+		<micronaut.aot.packageName>one.microstream.aot.generated</micronaut.aot.packageName>
+		<exec.mainClass>one.microstream.Application</exec.mainClass>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+		<repository>
+			<id>gigamap-alpha</id>
+			<url>https://repo.microstream.one/repository/maven-gigamap/</url>
+		</repository>
+		<repository>
+			<id>ossrh-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.micronaut</groupId>
+			<artifactId>micronaut-http-server-netty</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.eclipsestore</groupId>
+			<artifactId>micronaut-eclipsestore</artifactId>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.serializer</groupId>
+					<artifactId>serializer</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<groupId>org.eclipse.store</groupId>
+					<artifactId>storage-embedded-configuration</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<groupId>org.eclipse.serializer</groupId>
+					<artifactId>persistence-binary-jdk8</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<groupId>org.eclipse.serializer</groupId>
+					<artifactId>persistence-binary-jdk17</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.eclipsestore</groupId>
+			<artifactId>micronaut-eclipsestore-annotations</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.serde</groupId>
+			<artifactId>micronaut-serde-jackson</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut</groupId>
+			<artifactId>micronaut-http-client</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.test</groupId>
+			<artifactId>micronaut-test-junit5</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.store</groupId>
+			<artifactId>storage-embedded-configuration</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.eclipse.serializer</groupId>
+			<artifactId>persistence-binary-jdk8</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.serializer</groupId>
+			<artifactId>persistence-binary-jdk17</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.store</groupId>
+			<artifactId>storage-embedded</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>one.microstream</groupId>
+			<artifactId>gigamap</artifactId>
+			<version>1.0.0-alpha5</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>io.micronaut.maven</groupId>
+				<artifactId>micronaut-maven-plugin</artifactId>
+				<configuration>
+					<configFile>aot-${packaging}.properties</configFile>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<!-- Uncomment to enable incremental compilation -->
+					<!--
+					<useIncrementalCompilation>false</useIncrementalCompilation> -->
+
+					<annotationProcessorPaths combine.children="append">
+						<path>
+							<groupId>io.micronaut</groupId>
+							<artifactId>micronaut-http-validation</artifactId>
+							<version>${micronaut.core.version}</version>
+						</path>
+						<path>
+							<groupId>io.micronaut.serde</groupId>
+							<artifactId>micronaut-serde-processor</artifactId>
+							<version>${micronaut.serialization.version}</version>
+							<exclusions>
+								<exclusion>
+									<groupId>io.micronaut</groupId>
+									<artifactId>micronaut-inject</artifactId>
+								</exclusion>
+							</exclusions>
+						</path>
+					</annotationProcessorPaths>
+					<compilerArgs>
+						<arg>-Amicronaut.processing.group=one.microstream</arg>
+						<arg>
+							-Amicronaut.processing.module=ESTraining_GigamapExample</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
