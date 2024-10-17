@@ -1,6 +1,5 @@
 package one.microstream.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -15,7 +14,6 @@ import jakarta.validation.constraints.NotBlank;
 import one.microstream.concurrent.ReadWriteLocked;
 import one.microstream.domain.Book;
 import one.microstream.domain.indices.BookIndices;
-import one.microstream.gigamap.GigaQuery;
 import one.microstream.storage.Root;
 
 
@@ -39,17 +37,12 @@ public class DAOBook extends ReadWriteLocked
 	
 	public List<Book> searchBooksTitle(String title)
 	{
-		this.read(() -> 
+		return this.read(() -> 
 		{
-			GigaQuery<Book> query = rootProvider.root().gigaBooks.query(BookIndices.titleIndex.containsIgnoreCase(title));
-			
-			try(Stream<Book> stream = query.stream())
-			{
-				return stream.limit(1000).collect(Collectors.toList());
-			}			
+			return rootProvider.root().gigaBooks
+				.query(BookIndices.titleIndex.contains(title))
+				.toList(1000);			
 		});
-		
-		return new ArrayList<Book>();
 	}
 	
 	public synchronized void insert(Book book)
