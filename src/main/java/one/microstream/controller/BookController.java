@@ -9,6 +9,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import one.microstream.domain.Book;
@@ -55,5 +56,14 @@ public class BookController
 	{
 		dao.insert(new Book(dto));
 		return HttpResponse.ok("Successfully created");
+	}
+	
+	@Put
+	HttpResponse<String> update(@NonNull @Valid @Body DTOBook dto)
+	{
+		List<Book> searchBooksTitle = dao.searchBooksTitle(dto.title());
+		
+		dao.update(dto);
+		return HttpResponse.ok("Successfully updated");
 	}
 }

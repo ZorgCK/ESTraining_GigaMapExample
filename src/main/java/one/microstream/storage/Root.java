@@ -1,8 +1,6 @@
 
 package one.microstream.storage;
 
-import java.util.Arrays;
-
 import io.micronaut.serde.annotation.Serdeable;
 import one.microstream.domain.Book;
 import one.microstream.domain.indices.BookIndices;
@@ -28,7 +26,7 @@ public class Root
 		indices.add(BookIndices.titleIndex);
 		indices.add(BookIndices.ISBNIndex);
 		indices.add(BookIndices.pubDateIndex);
-		indices.setIdentityIndices(Arrays.asList(BookIndices.ISBNIndex));
+		indices.setIdentityIndices(BookIndices.ISBNIndex);
 	}
 		
 	public GigaMap<Book> getGigaBooks()
