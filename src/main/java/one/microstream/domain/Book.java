@@ -3,72 +3,69 @@ package one.microstream.domain;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.serde.annotation.Serdeable;
+import jakarta.validation.Valid;
 import one.microstream.dto.DTOBook;
-
 
 @Serdeable
 public class Book
 {
-	private final String	ISBN;
+	private final String	isbn;
 	private final String	title;
-	private final LocalDate	publicationDate;
-	private final int		edition;
-	
-	private int				availableQuantity;
+	private final LocalDate	release;
 	private BigDecimal		price;
-	
-	public Book(DTOBook dto)
+	private final Author	author;
+		
+	public Book(String isbn, String name, LocalDate release, BigDecimal price, Author author)
 	{
 		super();
-		
-		this.ISBN = dto.ISBN();
-		this.title = dto.title();
-		this.publicationDate = dto.publicationDate();
-		this.edition = dto.edition();
-		this.availableQuantity = dto.availableQuantity();
-		
-		this.price = new BigDecimal(dto.price());
-	}
-	
-	public int getAvailableQuantity()
-	{
-		return availableQuantity;
-	}
-	
-	public void setAvailableQuantity(int availableQuantity)
-	{
-		this.availableQuantity = availableQuantity;
-	}
-	
-	public BigDecimal getPrice()
-	{
-		return price;
-	}
-	
-	public void setPrice(BigDecimal price)
-	{
+		this.isbn = isbn;
+		this.title = name;
 		this.price = price;
+		this.release = release;
+		this.author = author;
 	}
 	
-	public String getISBN()
+	public Book(@NonNull @Valid DTOBook dto)
 	{
-		return ISBN;
+		super();
+		this.isbn = dto.isbn();
+		this.title = dto.title();
+		this.price = dto.price();
+		this.release = dto.release();
+		this.author = dto.author();
 	}
+
+	public String getIsbn()
+	{
+		return isbn;
+	}
+	
 	
 	public String getTitle()
 	{
 		return title;
 	}
-	
-	public LocalDate getPublicationDate()
+
+	public BigDecimal getPrice()
 	{
-		return publicationDate;
+		return price;
 	}
 	
-	public int getEdition()
+	public Author getAuthor()
 	{
-		return edition;
+		return author;
+	}
+	
+	public LocalDate getRelease()
+	{
+		return release;
+	}
+	
+	public void setPrice(BigDecimal price)
+	{
+		this.price = price;
 	}
 	
 }

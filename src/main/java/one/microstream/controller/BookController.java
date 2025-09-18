@@ -15,6 +15,7 @@ import jakarta.validation.constraints.NotBlank;
 import one.microstream.domain.Book;
 import one.microstream.dto.DTOBook;
 import one.microstream.repository.DAOBook;
+import one.microstream.utils.MockupUtils;
 
 
 @Controller("/gigaBooks")
@@ -58,6 +59,15 @@ public class BookController
 		return HttpResponse.ok("Successfully created");
 	}
 	
+	@Get("/create_all")
+	public HttpResponse<?> createBooks()
+	{
+		List<Book> allCreatedBooks = MockupUtils.loadMockupData();
+		
+		dao.insert(allCreatedBooks);
+		
+		return HttpResponse.ok("Books successfully created!");
+	}
 	@Put
 	HttpResponse<String> update(@NonNull @Valid @Body DTOBook dto)
 	{

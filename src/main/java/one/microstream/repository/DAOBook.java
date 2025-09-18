@@ -1,12 +1,13 @@
 package one.microstream.repository;
 
-import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.serializer.concurrency.LockScope;
+import org.eclipse.store.gigamap.lucene.LuceneIndex;
 import org.eclipse.store.storage.types.StorageManager;
 
 import io.micronaut.core.annotation.NonNull;
@@ -38,10 +39,12 @@ public class DAOBook extends LockScope
 	}
 	
 	public List<Book> searchBooksTitle(String title)
-	{
+	{		
+		LuceneIndex<Book> luceneIndex = rootProvider.root().gigaBooks.index().get(LuceneIndex.class);
 		
-		return rootProvider.root().gigaBooks.query(BookIndices.titleIndex.contains(title)).toList(1000);
+		List<Book> result = luceneIndex.query("title:" + title);
 		
+		return result;
 	}
 	
 	
@@ -76,14 +79,26 @@ public class DAOBook extends LockScope
 		
 		//Option 2:
 //		rootProvider.root().gigaBooks.store();
+		
+		rootProvider.root().gigaBooks.index().get(LuceneIndex.class).close();
+	}
+	
+	public void insert(Collection<Book> books)
+	{
+		rootProvider.root().gigaBooks.addAll(books);
+		
+		//Option 1:
+		manager.store(rootProvider.root().gigaBooks);
+		
+		rootProvider.root().gigaBooks.index().get(LuceneIndex.class).close();
 	}
 
 	public void update(DTOBook dto)
 	{
-		Book book = getBookISBN(dto.ISBN());
+		Book book = getBookISBN(dto.isbn());
 		
 		rootProvider.root().gigaBooks.update(book, b -> {
-		    b.setPrice(new BigDecimal(dto.price()));
+		    b.setPrice(dto.price());
 		});
 		
 		manager.storeAll(rootProvider.root().gigaBooks, book);
