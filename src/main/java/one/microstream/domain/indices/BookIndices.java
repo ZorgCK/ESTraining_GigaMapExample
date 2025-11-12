@@ -35,20 +35,34 @@ public class BookIndices
 			return entity.getIsbn();
 		}
 	};
-	
-	public final static IndexerString<Book> titleIndex = new IndexerString.Abstract<Book>()
-	{
-		public String name()
-		{
-			return "title";
-		}
-		
-		@Override
-		public String getString(final Book entity)
-		{
-			return entity.getTitle();
-		}
-	};
+
+    public final static IndexerLocalDate<Book> pubDateIndex = new IndexerLocalDate.Abstract<Book>()
+    {
+        public String name()
+        {
+            return "releaseDate";
+        }
+
+        @Override
+        protected LocalDate getLocalDate(final Book entity)
+        {
+            return entity.getRelease();
+        }
+    };
+
+//	public final static IndexerString<Book> titleIndex = new IndexerString.Abstract<Book>()
+//	{
+//		public String name()
+//		{
+//			return "title";
+//		}
+//
+//		@Override
+//		public String getString(final Book entity)
+//		{
+//			return entity.getTitle();
+//		}
+//	};
 
 	public static void registerLuceneIndex(GigaMap<Book> map)
 	{
@@ -62,17 +76,5 @@ public class BookIndices
 		map.index().register(category);
 	}
 	
-	public final static IndexerLocalDate<Book> pubDateIndex = new IndexerLocalDate.Abstract<Book>()
-	{
-		public String name()
-		{
-			return "releaseDate";
-		}
-		
-		@Override
-		protected LocalDate getLocalDate(final Book entity)
-		{
-			return entity.getRelease();
-		}
-	};
+
 }

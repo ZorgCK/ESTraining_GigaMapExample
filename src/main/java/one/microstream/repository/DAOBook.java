@@ -25,7 +25,6 @@ public class DAOBook extends LockScope
 {
 	public final RootProvider<Root>	rootProvider;
 	private final StorageManager	manager;
-	private int						storeCount	= 0;
 	
 	DAOBook(final RootProvider<Root> rootProvider, final StorageManager manager)
 	{
@@ -46,8 +45,7 @@ public class DAOBook extends LockScope
 		
 		return result;
 	}
-	
-	
+
 	public List<Book> pageBooks(@NonNull @NotBlank int limit)
 	{
 		Root root = rootProvider.root();

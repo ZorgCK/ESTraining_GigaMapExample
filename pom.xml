@@ -50,25 +50,25 @@
 		<dependency>
 			<groupId>org.eclipse.serializer</groupId>
 			<artifactId>persistence-binary-jdk8</artifactId>
-			<version>3.0.0</version>
+			<version>3.0.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.eclipse.store</groupId>
 			<artifactId>storage-embedded</artifactId>
-			<version>3.0.0</version>
+			<version>3.0.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.eclipse.store</groupId>
 			<artifactId>storage-embedded-configuration</artifactId>
-			<version>3.0.0</version>
+			<version>3.0.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.eclipse.store</groupId>
 			<artifactId>gigamap</artifactId>
-			<version>3.0.0</version>
+			<version>3.0.1</version>
 		</dependency>
 
 		<dependency>
@@ -80,7 +80,7 @@
 		<dependency>
 			<groupId>org.eclipse.store</groupId>
 			<artifactId>gigamap-lucene</artifactId>
-			<version>3.0.0</version>
+			<version>3.0.1</version>
 		</dependency>
 
 		<dependency>
