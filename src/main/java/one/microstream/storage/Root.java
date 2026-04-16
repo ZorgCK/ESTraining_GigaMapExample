@@ -17,25 +17,25 @@ import one.microstream.domain.indices.BookIndices;
 @Serdeable
 public class Root
 {
-	public GigaMap<Book>	gigaBooks	= GigaMap.New();
-	
-	public Root()
-	{
-		super();
-		
-		final BitmapIndices<Book> indices = gigaBooks.index().bitmap();
-		indices.add(BookIndices.ISBNIndex);
-		BookIndices.registerLuceneIndex(gigaBooks);
-		indices.setIdentityIndices(BookIndices.ISBNIndex);
-	}
-
-	public GigaMap<Book> getGigaBooks()
-	{
-		return gigaBooks;
-	}
-	
-	public void setGigaBooks(GigaMap<Book> gigaBooks)
-	{
-		this.gigaBooks = gigaBooks;
-	}
+//	public GigaMap<Book>	gigaBooks	= GigaMap.New();
+//
+//	public Root()
+//	{
+//		super();
+//
+//		final BitmapIndices<Book> indices = gigaBooks.index().bitmap();
+//		indices.add(BookIndices.ISBNIndex);
+//		BookIndices.registerLuceneIndex(gigaBooks);
+//		indices.setIdentityIndices(BookIndices.ISBNIndex);
+//	}
+//
+//	public GigaMap<Book> getGigaBooks()
+//	{
+//		return gigaBooks;
+//	}
+//
+//	public void setGigaBooks(GigaMap<Book> gigaBooks)
+//	{
+//		this.gigaBooks = gigaBooks;
+//	}
 }

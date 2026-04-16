@@ -27,60 +27,58 @@ public class DAOBook extends LockScope
 
 	public Book getBookISBN(String isbn)
 	{
-		return storageService.provideRoot().gigaBooks.query(BookIndices.ISBNIndex.is(isbn)).findFirst().get();
+//		return storageService.provideRoot().gigaBooks.query(BookIndices.ISBNIndex.is(isbn)).findFirst().get();
 	}
 	
 	public List<Book> searchBooks(String searchTerm)
 	{		
-		LuceneIndex<Book> luceneIndex = storageService.provideRoot().gigaBooks.index().get(LuceneIndex.class);
-		
-		List<Book> result = luceneIndex.query("title:" + searchTerm + " OR authorLastname:" + searchTerm);
-		
-		return result;
+//		LuceneIndex<Book> luceneIndex = storageService.provideRoot().gigaBooks.index().get(LuceneIndex.class);
+//
+//		List<Book> result = luceneIndex.query("title:" + searchTerm + " OR authorLastname:" + searchTerm);
+//
+//		return result;
 	}
 
 	public List<Book> pageBooks(@NonNull @NotBlank int limit)
 	{
-		try(Stream<Book> stream = storageService.provideRoot().gigaBooks.query().stream())
-		{
-			return stream.limit(limit).collect(Collectors.toList());
-		}
+//		try(Stream<Book> stream = storageService.provideRoot().gigaBooks.query().stream())
+//		{
+//			return stream.limit(limit).collect(Collectors.toList());
+//		}
 	}
 	
 	public Long countBooks()
 	{
-		AtomicLong count = new AtomicLong();
-		
-		this.read(() ->
-		{
-			count.addAndGet(storageService.provideRoot().gigaBooks.query().count());
-		});
-		
-		return count.get();
+//		AtomicLong count = new AtomicLong();
+//
+//		this.read(() ->
+//		{
+//			count.addAndGet(storageService.provideRoot().gigaBooks.query().count());
+//		});
+//
+//		return count.get();
 	}
 
 	public void insert(Book book)
 	{
-        storageService.provideRoot().gigaBooks.add(book);
-
-        storageService.provideRoot().gigaBooks.store();
+//        storageService.provideRoot().gigaBooks.add(book);
+//        storageService.provideRoot().gigaBooks.store();
 	}
 	
 	public void insert(Collection<Book> books)
 	{
-        storageService.provideRoot().gigaBooks.addAll(books);
-
-        storageService.provideRoot().gigaBooks.store();
+//        storageService.provideRoot().gigaBooks.addAll(books);
+//        storageService.provideRoot().gigaBooks.store();
 	}
 
 	public void update(DTOBook dto)
 	{
-		Book book = getBookISBN(dto.isbn());
-
-        storageService.provideRoot().gigaBooks.update(book, b -> {
-		    b.setPrice(dto.price());
-		});
-
-        storageService.provideStorageManager().storeAll(storageService.provideRoot().gigaBooks, book);
+//		Book book = getBookISBN(dto.isbn());
+//
+//      storageService.provideRoot().gigaBooks.update(book, b -> {
+//		    b.setPrice(dto.price());
+//		});
+//
+//        storageService.provideRoot().gigaBooks.store();
 	}
 }

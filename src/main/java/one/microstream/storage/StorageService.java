@@ -12,30 +12,30 @@ public class StorageService
 
     public EmbeddedStorageManager provideStorageManager() {
 
-        if (storageManager == null)
-        {
-            initDatabase();
-        }
-
-        return storageManager;
+//        if (storageManager == null)
+//        {
+//            initDatabase();
+//        }
+//
+//        return storageManager;
     }
 
     public Root provideRoot()
     {
-        if (storageManager == null)
-        {
-            initDatabase();
-        }
-        return root;
+//        if (storageManager == null)
+//        {
+//            initDatabase();
+//        }
+//        return root;
     }
 
     private void initDatabase()
     {
-        this.root = new Root();
-        this.storageManager = EmbeddedStorageConfiguration.Builder()
-                .setChannelCount(2)
-                .setStorageDirectory("storage")
-                .createEmbeddedStorageFoundation().createEmbeddedStorageManager(root)
-                .start();
+//        this.root = new Root();
+//        this.storageManager = EmbeddedStorageConfiguration.Builder()
+//                .setChannelCount(2)
+//                .setStorageDirectory("storage")
+//                .createEmbeddedStorageFoundation().createEmbeddedStorageManager(root)
+//                .start();
     }
 }

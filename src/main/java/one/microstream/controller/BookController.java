@@ -63,17 +63,16 @@ public class BookController
 	@Get("/create_all")
 	public HttpResponse<?> createBooks()
 	{
-		List<Book> allCreatedBooks = MockupUtils.loadMockupData().stream().filter(b -> b.getAuthor() != null).collect(Collectors.toUnmodifiableList());
+		List<Book> allCreatedBooks = MockupUtils.loadMockupData();
 		
 		dao.insert(allCreatedBooks);
 		
 		return HttpResponse.ok("Books successfully created!");
 	}
+
 	@Put
 	HttpResponse<String> update(@NonNull @Valid @Body DTOBook dto)
 	{
-		List<Book> searchBooksTitle = dao.searchBooks(dto.title());
-		
 		dao.update(dto);
 		return HttpResponse.ok("Successfully updated");
 	}
