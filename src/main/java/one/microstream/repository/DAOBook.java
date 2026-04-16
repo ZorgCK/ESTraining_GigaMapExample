@@ -6,51 +6,42 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import jakarta.inject.Inject;
+import one.microstream.storage.StorageService;
 import org.eclipse.serializer.concurrency.LockScope;
 import org.eclipse.store.gigamap.lucene.LuceneIndex;
-import org.eclipse.store.storage.types.StorageManager;
 
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.eclipsestore.RootProvider;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotBlank;
 import one.microstream.domain.Book;
 import one.microstream.domain.indices.BookIndices;
 import one.microstream.dto.DTOBook;
-import one.microstream.storage.Root;
 
 
 @Singleton
 public class DAOBook extends LockScope
 {
-	public final RootProvider<Root>	rootProvider;
-	private final StorageManager	manager;
-	
-	DAOBook(final RootProvider<Root> rootProvider, final StorageManager manager)
-	{
-		this.rootProvider = rootProvider;
-		this.manager = manager;
-	}
-	
+    @Inject
+    StorageService storageService;
+
 	public Book getBookISBN(String isbn)
 	{
-		return rootProvider.root().gigaBooks.query(BookIndices.ISBNIndex.is(isbn)).findFirst().get();
+		return storageService.provideRoot().gigaBooks.query(BookIndices.ISBNIndex.is(isbn)).findFirst().get();
 	}
 	
-	public List<Book> searchBooksTitle(String title)
+	public List<Book> searchBooks(String searchTerm)
 	{		
-		LuceneIndex<Book> luceneIndex = rootProvider.root().gigaBooks.index().get(LuceneIndex.class);
+		LuceneIndex<Book> luceneIndex = storageService.provideRoot().gigaBooks.index().get(LuceneIndex.class);
 		
-		List<Book> result = luceneIndex.query("title:" + title);
+		List<Book> result = luceneIndex.query("title:" + searchTerm + " OR authorLastname:" + searchTerm);
 		
 		return result;
 	}
 
 	public List<Book> pageBooks(@NonNull @NotBlank int limit)
 	{
-		Root root = rootProvider.root();
-		
-		try(Stream<Book> stream = root.gigaBooks.query().stream())
+		try(Stream<Book> stream = storageService.provideRoot().gigaBooks.query().stream())
 		{
 			return stream.limit(limit).collect(Collectors.toList());
 		}
@@ -62,7 +53,7 @@ public class DAOBook extends LockScope
 		
 		this.read(() ->
 		{
-			count.addAndGet(rootProvider.root().gigaBooks.query().count());
+			count.addAndGet(storageService.provideRoot().gigaBooks.query().count());
 		});
 		
 		return count.get();
@@ -70,35 +61,26 @@ public class DAOBook extends LockScope
 
 	public void insert(Book book)
 	{
-		rootProvider.root().gigaBooks.add(book);
-		
-		//Option 1:
-		manager.store(rootProvider.root().gigaBooks);
-		
-		//Option 2:
-//		rootProvider.root().gigaBooks.store();
-		
-		rootProvider.root().gigaBooks.index().get(LuceneIndex.class).close();
+        storageService.provideRoot().gigaBooks.add(book);
+
+        storageService.provideRoot().gigaBooks.store();
 	}
 	
 	public void insert(Collection<Book> books)
 	{
-		rootProvider.root().gigaBooks.addAll(books);
-		
-		//Option 1:
-		manager.store(rootProvider.root().gigaBooks);
-		
-		rootProvider.root().gigaBooks.index().get(LuceneIndex.class).close();
+        storageService.provideRoot().gigaBooks.addAll(books);
+
+        storageService.provideRoot().gigaBooks.store();
 	}
 
 	public void update(DTOBook dto)
 	{
 		Book book = getBookISBN(dto.isbn());
-		
-		rootProvider.root().gigaBooks.update(book, b -> {
+
+        storageService.provideRoot().gigaBooks.update(book, b -> {
 		    b.setPrice(dto.price());
 		});
-		
-		manager.storeAll(rootProvider.root().gigaBooks, book);
+
+        storageService.provideStorageManager().storeAll(storageService.provideRoot().gigaBooks, book);
 	}
 }

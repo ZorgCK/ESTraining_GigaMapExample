@@ -1,6 +1,7 @@
 package one.microstream.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpResponse;
@@ -43,7 +44,7 @@ public class BookController
 	@Get("/search/{searchTerm}")
 	List<Book> searchBook(@NonNull @NotBlank @PathVariable String searchTerm)
 	{
-		return dao.searchBooksTitle(searchTerm);
+		return dao.searchBooks(searchTerm);
 	}
 	
 	@Get("/{isbn}")
@@ -62,7 +63,7 @@ public class BookController
 	@Get("/create_all")
 	public HttpResponse<?> createBooks()
 	{
-		List<Book> allCreatedBooks = MockupUtils.loadMockupData();
+		List<Book> allCreatedBooks = MockupUtils.loadMockupData().stream().filter(b -> b.getAuthor() != null).collect(Collectors.toUnmodifiableList());
 		
 		dao.insert(allCreatedBooks);
 		
@@ -71,7 +72,7 @@ public class BookController
 	@Put
 	HttpResponse<String> update(@NonNull @Valid @Body DTOBook dto)
 	{
-		List<Book> searchBooksTitle = dao.searchBooksTitle(dto.title());
+		List<Book> searchBooksTitle = dao.searchBooks(dto.title());
 		
 		dao.update(dto);
 		return HttpResponse.ok("Successfully updated");

@@ -107,7 +107,8 @@ public class MockupUtils
 			(String)author.get("first_name"),
 			(String)author.get("email"),
 			(String)author.get("gender"));
-		
+		a.setLastname((String)author.get("last_name"));
+
 		return a;
 	}
 }

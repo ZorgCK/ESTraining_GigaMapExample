@@ -16,15 +16,7 @@ import one.microstream.domain.indices.BookIndices;
  */
 @Serdeable
 public class Root
-{	
-	//Step 1
-	//private List<Book> books1 = new ArrayList<Book>();
-	//Step 2
-	//private Lazy<List<Book>> books2 = Lazy.Reference(new ArrayList<Book>());
-	//Step 3
-	//private Map<String, Lazy<List<Book>>> books3 = new HashMap<String, Lazy<List<Book>>>();
-	//Step 4
-	
+{
 	public GigaMap<Book>	gigaBooks	= GigaMap.New();
 	
 	public Root()
@@ -33,7 +25,6 @@ public class Root
 		
 		final BitmapIndices<Book> indices = gigaBooks.index().bitmap();
 		indices.add(BookIndices.ISBNIndex);
-		indices.add(BookIndices.pubDateIndex);
 		BookIndices.registerLuceneIndex(gigaBooks);
 		indices.setIdentityIndices(BookIndices.ISBNIndex);
 	}
